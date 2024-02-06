@@ -3,6 +3,15 @@ from pprint import pprint
 from clint.textui import puts, indent, colored
 
 
+def recommend_similar(game_name):
+    pass
+
+def search_by_name(game_name):
+    pass
+
+def random_game():
+    pass
+
 def main():
     print("------------------------------------------------------------------------------------------")
     puts(colored.red("** Welcome! Use this program to help you find your next favorite board game!"))
@@ -15,26 +24,37 @@ def main():
             "options",
             message = "Choose an option:",
             choices=[
+                "Recommend a similar game",
                 "Search for a game by name",
+                "Recommend a random game",
                 "Quit"
             ],
         ),
     ]
 
-    user_choice = inquirer.prompt(options)
-    pprint(user_choice)
+    while True:
+        user_choice = inquirer.prompt(options)
 
-# def userActions():
-#     # Main Menu Options #
-#     userActions = inquirer.select(
-#         msg = "Select an option:",
-#         choices = [
-#             "Search a game by name"
-#         ],
-#         default = "Search a game by name",
-#     ).execute()
-#     return userActions
+        if user_choice == {'options': 'Recommend a similar game'}:
+            game_name = input("Enter the name of a game you enjoy: ")
+            recommend_similar(game_name)
+            break
 
+        elif user_choice == {'options': 'Search for a game by name'}:
+            game_name = input("Enter the name of any Board Game: ")
+            search_by_name(game_name)
+            break
+
+        elif user_choice == {'options': 'Recommend a random game'}:
+            break
+
+        elif user_choice == {'options': 'Quit'}:
+            break
+
+        else:
+            print("This is an invalid option. Please try again...")
+
+    print("\n\n")
 
 
 

@@ -3,7 +3,7 @@ from pprint import pprint
 from clint.textui import puts, indent, colored
 
 
-def recommend_similar(game_name):
+def search_by_genre(genre):
     pass
 
 def search_by_name(game_name):
@@ -24,7 +24,7 @@ def main():
             "options",
             message = "Choose an option:",
             choices=[
-                "Recommend a similar game",
+                "Search for a game by genre",
                 "Search for a game by name",
                 "Recommend a random game",
                 "Quit"
@@ -33,11 +33,11 @@ def main():
     ]
 
     while True:
-        user_choice = inquirer.prompt(options)
+        user_choice = inquirer.prompt(options)['options']
 
-        if user_choice == {'options': 'Recommend a similar game'}:
-            game_name = input("Enter the name of a game you enjoy: ")
-            recommend_similar(game_name)
+        if user_choice == {'options': 'Search for a game by genre'}:
+            genre = input("Enter the name of a game you enjoy: ")
+            search_by_genre(genre)
             break
 
         elif user_choice == {'options': 'Search for a game by name'}:

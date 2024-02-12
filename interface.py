@@ -65,14 +65,14 @@ def main():
                     print(f"{key}: {value}")
                 print("\n")
             else:
-                print("Hm, that's odd. We can't find that game. Please try again.")
+                puts(colored.red("Hm, that's odd. We can't find that game. Please try again.\n"))
 
         elif user_choice == {'options': 'Recommend a random game'}:
             random_game()
 
         elif user_choice == {'options': 'Quit'}:
             print("------------------------------------------------------------------------------------------")
-            puts(colored.red("Thanks for using my tool. I hope you've found it helpful!"))
+            puts(colored.red("               Thanks for using my tool. I hope you've found it helpful!"))
             print("------------------------------------------------------------------------------------------")
             break
         else:

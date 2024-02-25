@@ -8,7 +8,7 @@ BOARDGAME_LIST = 'boardgames_ranks.csv'
 
 # removes spaces, capitals, and special characters
 def normalize_text(text):
-    return re.sub(r'\W+', '', text).lower() 
+    return re.sub(r'\W+', '', text).lower()
 
 def search_by_genre(genre):
     pass
@@ -20,7 +20,7 @@ def search_by_name(u_input, BOARDGAME_LIST):
         for row in reader:
             if(normalize_text(row['name']) == normy_input):
                 return row
-
+    # if the name isn't on the csv then 'Nothing' is returned
     return None
 
 

@@ -16,4 +16,6 @@ To demonstrate the microservice I created for my partner you have to run partner
 
 After entering a valid book and author it will call the Google Books API which will query the user input against Google Books' database, and if the book is found it will add the book to a .txt document titled 'wishlist.txt'. If you open the file you will find the title of the book with author and ISBN.
 
-At that point the program kicks control back to partners_code.py and awaits for the next time its called. Eventually functionality will be managed through the use of sockets, but for now it's running from wishlist.py. 
+At that point the program kicks control back to partners_code.py and awaits for the next time its called. Eventually functionality will be managed through the use of sockets, but for now it's running from wishlist.py.
+
+![Microservice UML Sequence Diagram](./microservice/assignment%209%20uml.png)

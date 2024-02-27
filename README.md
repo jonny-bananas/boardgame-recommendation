@@ -7,3 +7,13 @@ What it will eventually be is a simple command line app that will prompt the use
 For this project I've used:
  - Miguel Ángel García's Python Inquirer: https://github.com/magmax/python-inquirer
  - Kenneth Reitz's Python CLI Tool: https://github.com/kennethreitz-archive/clint
+
+
+
+PARTNER'S  MICROSERVICE
+
+To demonstrate the microservice I created for my partner you have to run partners_code.py and after being presented the menu, press '4' for the option to create a wishlist and kick you over to the manage_wishlist() function in wishlist.py. At that point it will prompt you to enter the title of a book you want to add, and next it will prompt you for an author.
+
+After entering a valid book and author it will call the Google Books API which will query the user input against Google Books' database, and if the book is found it will add the book to a .txt document titled 'wishlist.txt'. If you open the file you will find the title of the book with author and ISBN.
+
+At that point the program kicks control back to partners_code.py and awaits for the next time its called. Eventually functionality will be managed through the use of sockets, but for now it's running from wishlist.py. 

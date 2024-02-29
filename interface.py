@@ -1,6 +1,7 @@
 import inquirer
 import csv
 import re
+import socket
 from pprint import pprint
 from clint.textui import puts, indent, colored
 
@@ -39,7 +40,7 @@ def main():
             "options",
             message = "Choose an option:",
             choices=[
-                "Search for a game by genre",
+                "Search Board Game Geek's Top 50",
                 "Search for a game by name",
                 "Recommend a random game",
                 "Quit"
@@ -50,9 +51,15 @@ def main():
     while True:
         user_choice = inquirer.prompt(options)
 
-        if user_choice == {'options': 'Search for a game by genre'}:
-            genre = input("What kind of game would you like to look up: ")
-            search_by_genre(genre)
+        # partner's microservice
+        if user_choice == {'options': 'Search Board Game Geek\'s Top 50'}:
+            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            client_socket.connect(('localhost', 32000))
+
+            server_message = client_socket.recv(4096).decode()
+            print(server_message)
+
+            client_socket.close()
 
         elif user_choice == {'options': 'Search for a game by name'}:
             game_name = input("Enter the name of any Board Game: ")

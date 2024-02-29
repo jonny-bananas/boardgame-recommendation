@@ -6,9 +6,11 @@ API_KEY = "AIzaSyC9ovgCfwWQ0qsS_KQrwrjrdlBhlKA1lFc"
 WISHLIST_FILE = "wishlist.txt"
 
 def manage_wishlist():
-    print(f"You have chosen to add a new book to your wishlist. Enter the info from the prompts that "
-            f"appear below.")
-    print("** The title and artist must be input. It can't find your book otherwise ** \n\n")
+    print("\n\n")
+    print("---------------------------------------------------------------------------------------------")
+    print("                     You've chosen to add a book to your wishlist!")
+    print("** In order for this to work you'll have to enter BOTH the title of the book and the author **")
+    print("---------------------------------------------------------------------------------------------\n\n")
     
     title = input("What is the name of the book you want to add?: ")
     author = input(f"Who is the author of {title}?: ")
@@ -24,10 +26,10 @@ def manage_wishlist():
             'isbn': ", ".join([identifier['identifier'] for identifier in book['volumeInfo'].get('industryIdentifiers', []) if identifier['type'] in ['ISBN_10', 'ISBN_13']])
         }    
         copy_to_wishlist(book_detail)
-        print(f"I've added {title} to {WISHLIST_FILE}\n\n")
+        print(f"\nI've added {title} to {WISHLIST_FILE}\n\n")
         return
     else:
-        print(f"Sorry I couldn't find the book {title} by {author}.\n\n")
+        print(f"\nSorry I couldn't find the book {title} by {author}.\n\n")
         return
 
 def search_for_book(title, author):

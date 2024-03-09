@@ -5,8 +5,6 @@
 
 import zmq
 import pandas
-import wishlist
-from wishlist import manage_wishlist
 
 context = zmq.Context()
 #  Socket to talk to server
@@ -19,9 +17,8 @@ print(f"Hello! Welcome to your personal library/catalog! \n With this catalog, y
       f"To interact with your library, select from one of the options below!\n\n"
       f"   Enter 1 or add to add a book to your catalog\n"
       f"   Enter 2 or view to view the books in your catalog\n"
-      f"   Enter 3 or exit to quit the program\n"
-      f"   Enter 4 or wishlist to add a book to your wishlist\n\n")
-
+      f"   Enter 3 or wishlist to add a book to your wishlist\n"
+      f"   Enter 4 or exit to quit the program\n\n")
 
 while True:
 
@@ -119,14 +116,36 @@ while True:
         print(books)
 
 
-    elif user_input == "3" or user_input.lower() == "exit":
+    elif user_input == "3" or user_input.lower() == "wishlist":
+        print("\n\n")
+        print("---------------------------------------------------------------------------------------------")
+        print("                     You've chosen to add a book to your wishlist!")
+        print("** In order for this to work you'll have to enter BOTH the title of the book and the author **")
+        print("---------------------------------------------------------------------------------------------\n\n")
+        
+        title = input("What is the name of the book you want to add?: ")
+        author = input(f"Who is the author of {title}?: ")
+
+        # connects to wishlist socket
+        wishlist_socket = context.socket(zmq.REQ)
+        wishlist_socket.connect("tcp://localhost:5556")
+
+        # the '|' allows you to send multiple things in one send msg
+        wishlist_socket.send_string(f"add_to_wishlist|{title}|{author}")
+        response = wishlist_socket.recv().decode()
+
+        if response == "book_added_to_wishlist":
+            print(f"\nI've added {title} to the wishlist.\n\n")
+        else:
+            print(f"\nSorry, there was an error adding the book to the wishlist.\n\n")
+
+        wishlist_socket.close()
+
+
+    elif user_input == "4" or user_input.lower() == "exit":
         print("You've opted to quit the program, have a nice day!")
         socket.send_string(f"close_program")
         break
-
-
-    elif user_input == "4" or user_input.lower() == "wishlist":
-        manage_wishlist()
 
 
     else:

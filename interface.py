@@ -42,7 +42,7 @@ def main():
             choices=[
                 "Search Board Game Geek's Top 50",
                 "Search for a game by name",
-                "Recommend a random game",
+                "Find a random game", # maybe have it choose a random game from the csv
                 "Quit"
             ],
         ),
@@ -57,7 +57,7 @@ def main():
             client_socket.connect(('localhost', 32000))
 
             server_message = client_socket.recv(4096).decode()
-            print(server_message)
+            puts(colored.green(server_message))
 
             client_socket.close()
 
@@ -67,12 +67,12 @@ def main():
 
             if result:
                 print("\n")
-                puts(colored.red("Is this the game you want: "))
+                puts(colored.red("Is this the game you want: \n"))
                 for key, value in result.items():
-                    print(f"{key}: {value}")
+                    puts(colored.green(f"{key}: {value}"))
                 print("\n")
             else:
-                puts(colored.red("Hm, that's odd. We can't find that game. Please try again.\n"))
+                puts(colored.red("Hm, that's odd. I can't find that game. Please try again.\n"))
 
         elif user_choice == {'options': 'Recommend a random game'}:
             random_game()

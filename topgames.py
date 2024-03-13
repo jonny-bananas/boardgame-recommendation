@@ -21,24 +21,34 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind(('localhost', server_port))
 server_socket.listen(1)
 
-connected, address = server_socket.accept()
 
-while connected:
+while True:
+    print("Waiting for client to connect...")
+    connected, address = server_socket.accept()
+    
+    while True:
+        data = connected.recv(1024).decode()
 
-    bgg_api = "https://www.boardgamegeek.com/xmlapi2/hot?boardgame"
+        if data == "get_top_50":
+            bgg_api = "https://www.boardgamegeek.com/xmlapi2/hot?boardgame"
+            response = requests.get(bgg_api)
+            xml_str = response.text
+            root = ET.fromstring(xml_str)
 
-    response = requests.get(bgg_api)
-    xml_str = response.text
-    root = ET.fromstring(xml_str)
-    hottness = ''
+            hottness = ''
+            for item in root.findall("item"):
+                rank = item.get("rank")
+                name = item.find("name").get("value")
+                hottness = hottness + f"{rank}. {name}\n"
 
-    for item in root.findall("item"):
-        rank = item.get("rank")
-        name = item.find("name").get("value")
-        hottness = hottness + f"{rank}. {name}\n"
+            connected.send(hottness.encode())
+            print("Data has been sent")
+        elif data == "quit":
+            print("Client requested to quit")
+            break
+        else:
+            print("Invalid request from the client")
 
-    connected.send(hottness.encode())
-    break
-
-connected.close()
+    connected.close()
+    print("Connection closed")
 

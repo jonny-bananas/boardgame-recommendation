@@ -2,6 +2,7 @@ import inquirer
 import csv
 import re
 import socket
+import random
 from pprint import pprint
 from clint.textui import puts, indent, colored
 
@@ -11,22 +12,33 @@ BOARDGAME_LIST = 'boardgames_ranks.csv'
 def normalize_text(text):
     return re.sub(r'\W+', '', text).lower()
 
-def search_by_genre(genre):
-    pass
-
 def search_by_name(u_input, BOARDGAME_LIST):
     normy_input = normalize_text(u_input)
     with open(BOARDGAME_LIST, newline= '', encoding= 'utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             if(normalize_text(row['name']) == normy_input):
-                return row
+                return{
+                    'Name' : row['name'],
+                    'Rank' : row['rank'],
+                    "BGG Average" : row['average'],
+                    "Year Published" : row["yearpublished"]
+                }
+            
     # if the name isn't on the csv then 'Nothing' is returned
     return None
 
 
 def random_game():
-    pass
+    with open(BOARDGAME_LIST, newline='', encoding= 'utf-8') as csvfile:
+        reader = csv.DictReader(csvfile)
+        game_names = [row['name'] for row in reader] # stores the names of each game in a variable
+
+        if game_names:
+            return random.choice(game_names)
+        else:
+            return None
+
 
 def main():
     print("------------------------------------------------------------------------------------------")
@@ -40,26 +52,26 @@ def main():
             "options",
             message = "Choose an option:",
             choices=[
-                "Search Board Game Geek's Top 50",
                 "Search for a game by name",
-                "Find a random game", # maybe have it choose a random game from the csv
+                "Find a random game",
+                "Search Board Game Geek's Top 50",
                 "Quit"
             ],
         ),
     ]
+
+    # Sam's socket
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client_socket.connect(('localhost', 32000))
 
     while True:
         user_choice = inquirer.prompt(options)
 
         # partner's microservice
         if user_choice == {'options': 'Search Board Game Geek\'s Top 50'}:
-            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            client_socket.connect(('localhost', 32000))
-
+            client_socket.send("get_top_50".encode())
             server_message = client_socket.recv(4096).decode()
             puts(colored.green(server_message))
-
-            client_socket.close()
 
         elif user_choice == {'options': 'Search for a game by name'}:
             game_name = input("Enter the name of any Board Game: ")
@@ -74,18 +86,20 @@ def main():
             else:
                 puts(colored.red("Hm, that's odd. I can't find that game. Please try again.\n"))
 
-        elif user_choice == {'options': 'Recommend a random game'}:
-            random_game()
+        elif user_choice == {'options': 'Find a random game'}:
+            game = random_game()
+            puts(colored.red(f"""I pulled "{game}" out of my magic hat!\n\n"""))
 
         elif user_choice == {'options': 'Quit'}:
+            client_socket.send("quit".encode())
             print("------------------------------------------------------------------------------------------")
             puts(colored.red("               Thanks for using my tool. I hope you've found it helpful!"))
             print("------------------------------------------------------------------------------------------")
+            client_socket.close()
             break
         else:
             print("This is an invalid option. Please try again...")
     print("\n")
-
 
 
 if __name__ == "__main__":

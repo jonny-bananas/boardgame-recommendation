@@ -52,9 +52,10 @@ def main():
             "options",
             message = "Choose an option:",
             choices=[
-                "Search for a game by name",
+                "Feature Explanation",
                 "Find a random game",
-                "Search Board Game Geek's Top 50",
+                "Search for a game by name",
+                "Search BoardGameGeek's Top 50",
                 "Quit"
             ],
         ),
@@ -68,7 +69,7 @@ def main():
         user_choice = inquirer.prompt(options)
 
         # partner's microservice
-        if user_choice == {'options': 'Search Board Game Geek\'s Top 50'}:
+        if user_choice == {'options': 'Search BoardGameGeek\'s Top 50'}:
             client_socket.send("get_top_50".encode())
             server_message = client_socket.recv(4096).decode()
             puts(colored.green(server_message))
@@ -89,6 +90,13 @@ def main():
         elif user_choice == {'options': 'Find a random game'}:
             game = random_game()
             puts(colored.red(f"""I pulled "{game}" out of my magic hat!\n\n"""))
+
+        elif user_choice == {'options': 'Feature Explanation'}:
+            puts(colored.white("-------------------------------------------------------------------------------------------------------------------"))
+            puts(colored.red("'Find a Random Game': searches Board Game Geek's game database and suggests a random game.\n"))
+            puts(colored.red("'Search for a Game by Name' allows you to enter the name of a board game you're interested in.\n"))
+            puts(colored.red("'Search BoardGameGeek\'s Top 50' displays that day's top 50 board games, according to the BoardGameGeek website."))
+            puts(colored.white("-------------------------------------------------------------------------------------------------------------------\n\n"))
 
         elif user_choice == {'options': 'Quit'}:
             client_socket.send("quit".encode())

@@ -1,4 +1,4 @@
-# osu-cs361-w24
+# Board Game Recommendation
 
 A repository for a personal project started while taking CS361: Software Engineering 1 (OSU W24)
 
